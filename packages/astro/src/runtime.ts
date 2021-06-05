@@ -1,6 +1,6 @@
-import 'source-map-support/register.js';
 import type { LogOptions } from './logger';
 import type { AstroConfig, CollectionResult, CollectionRSS, CreateCollection, Params, RuntimeMode } from './@types/astro';
+import type { CompileError as ICompileError } from 'astro-parser';
 
 import resolve from 'resolve';
 import { existsSync, promises as fs } from 'fs';
@@ -8,7 +8,8 @@ import { fileURLToPath, pathToFileURL } from 'url';
 import { posix as path } from 'path';
 import { performance } from 'perf_hooks';
 import { SnowpackDevServer, ServerRuntime as SnowpackServerRuntime, SnowpackConfig, NotFoundError } from 'snowpack';
-import { CompileError } from '@astrojs/parser';
+import parser from '@astrojs/parser';
+const { CompileError } = parser;
 import { loadConfiguration, logger as snowpackLogger, startServer as startSnowpackServer } from 'snowpack';
 import { canonicalURL, getSrcPath, stopTimer } from './build/util.js';
 import { debug, info } from './logger.js';
@@ -41,7 +42,7 @@ type LoadResultSuccess = {
 };
 type LoadResultNotFound = { statusCode: 404; error: Error; collectionInfo?: CollectionInfo };
 type LoadResultRedirect = { statusCode: 301 | 302; location: string; collectionInfo?: CollectionInfo };
-type LoadResultError = { statusCode: 500 } & ({ type: 'parse-error'; error: CompileError } | { type: 'not-found'; error: CompileError } | { type: 'unknown'; error: Error });
+type LoadResultError = { statusCode: 500 } & ({ type: 'parse-error'; error: ICompileError } | { type: 'not-found'; error: ICompileError } | { type: 'unknown'; error: Error });
 
 export type LoadResult = (LoadResultSuccess | LoadResultNotFound | LoadResultRedirect | LoadResultError) & { collectionInfo?: CollectionInfo };
 

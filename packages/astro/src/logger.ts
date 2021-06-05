@@ -1,4 +1,3 @@
-import 'source-map-support/register.js';
 import type { CompileError } from '@astrojs/parser';
 import { bold, blue, red, grey, underline } from 'kleur/colors';
 import { Writable } from 'stream';

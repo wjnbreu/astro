@@ -1,4 +1,3 @@
-import 'source-map-support/register.js';
 import React from 'react';
 import App from './components/App';
 import Version from './components/Version';
