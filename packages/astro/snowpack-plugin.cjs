@@ -6,7 +6,13 @@ const transformPromise = import('./dist/compiler/index.js');
 module.exports = (snowpackConfig, { resolvePackageUrl, hmrPort, renderers, astroConfig } = {}) => {
   return {
     name: 'snowpack-astro',
-    knownEntrypoints: ['astro/dist/internal/h.js', 'astro/components/Prism.astro'],
+    knownEntrypoints: [
+      'astro/dist/internal/h.js',
+      'astro/components/Prism.astro',
+      'shorthash',
+      'estree-util-value-to-estree',
+      'astring'
+    ],
     resolve: {
       input: ['.astro', '.md'],
       output: ['.js', '.css'],
@@ -23,10 +29,10 @@ module.exports = (snowpackConfig, { resolvePackageUrl, hmrPort, renderers, astro
       * The output of this is the following (or something very close to it):
       *
       * ```js
-      * import * as __renderer_0 from '/_snowpack/link/packages/renderers/vue/index.js';
-      * import * as __renderer_1 from '/_snowpack/link/packages/renderers/svelte/index.js';
-      * import * as __renderer_2 from '/_snowpack/link/packages/renderers/preact/index.js';
-      * import * as __renderer_3 from '/_snowpack/link/packages/renderers/react/index.js';
+      * import * as __renderer_0 from '@astrojs/renderer-vue';
+      * import * as __renderer_1 from '@astrojs/renderer-svelte';
+      * import * as __renderer_2 from '@astrojs/renderer-preact';
+      * import * as __renderer_3 from '@astrojs/renderer-react';
       * let __rendererSources = ["/_snowpack/link/packages/renderers/vue/client.js", "/_snowpack/link/packages/renderers/svelte/client.js", "/_snowpack/link/packages/renderers/preact/client.js", "/_snowpack/link/packages/renderers/react/client.js"];
       * let __renderers = [__renderer_0, __renderer_1, __renderer_2, __renderer_3];
       * // the original file contents

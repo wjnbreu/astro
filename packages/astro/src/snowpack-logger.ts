@@ -19,13 +19,13 @@ export function configureSnowpackLogger(logger: typeof snowpackLogger) {
     logger.level = 'debug';
   }
 
-  logger.on('warn', (message) => {
+  /*logger.on('warn', (message) => {
     // Silence this output message, since it doesn't make sense for Astro.
     if (neverWarn.test(message)) {
       return;
     }
     console.error(message);
-  });
+  });*/
 
   logger.on('info', (message) => {
     // Cache messages that should only be shown once.
