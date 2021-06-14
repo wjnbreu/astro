@@ -23,6 +23,13 @@ const items = [0, 1, 2];
           <div id={`z${item}`} />
         )
       })}
+      {items.map(function (item) {
+        return (
+          <div id={`a${item}`} />
+          <div id={`b${item}`} />
+          <div id={`c${item}`} />
+        )
+      })}
     </main>
   </body>
 </html>

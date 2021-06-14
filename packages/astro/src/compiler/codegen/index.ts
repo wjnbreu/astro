@@ -467,15 +467,15 @@ async function compileHtml(enterNode: TemplateNode, state: CodegenState, compile
             const children: string[] = await Promise.all((node.children ?? []).map((child) => compileHtml(child, state, compileOptions)));
             let raw = '';
             let nextChildIndex = 0;
-            const hasMultipleChildren = children.length > 0;
+            const shouldUseFragment = children.length > 1 && (node.codeChunks[0].match(/\=\>/g) || node.codeChunks[0].match(/\bfunction\b/g)) && !(node.codeChunks[0].match(/\?/g) && node.codeChunks[1].match(/\:/g));
             for (const chunk of node.codeChunks) {
               raw += chunk;
               if (nextChildIndex < children.length) {
-                if (hasMultipleChildren && nextChildIndex === 0) {
+                if (shouldUseFragment && nextChildIndex === 0) {
                   raw += 'h(Fragment, null, '
                 }
-                raw += children[nextChildIndex++] + (hasMultipleChildren ? ',' : '');
-                if (hasMultipleChildren && nextChildIndex === children.length) {
+                raw += children[nextChildIndex++] + (shouldUseFragment ? ',' : '');
+                if (shouldUseFragment && nextChildIndex === children.length) {
                   raw += ')'
                 }
               }

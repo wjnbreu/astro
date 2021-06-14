@@ -51,7 +51,7 @@ Basics('Automatically supports Fragments in expressions', async ({ runtime }) =>
   const result = await runtime.load('/fragment');
   const html = result.contents;
   const $ = doc(html);
-  assert.equal($('main').children().length, 21);
+  assert.equal($('main').children().length, 30);
 });
 
 Basics.run();
