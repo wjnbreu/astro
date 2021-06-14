@@ -113,6 +113,35 @@ export let name;
 </main>
 ```
 
+### Fragments
+
+`.astro` files can render any number of top-level elements.
+
+```jsx
+---
+const ids = ['a', 'b', 'c'];
+---
+
+<div id={ids[0]} />
+<div id={ids[1]} />
+<div id={ids[2]} />
+```
+
+Inside of expressions, `.astro` can render any number of elements. There is no need for a `Fragment`-like wrapper.
+
+```jsx
+---
+const items = [0, 1, 2];
+const ids = ['a', 'b', 'c'];
+---
+
+{items.map((item, index) => (
+  <div id={`${item}-${ids[index]}`} />
+  <div id={`${item}-${ids[index]}`} />
+  <div id={`${item}-${ids[index]}`} />
+))}
+```
+
 ### `.astro` versus `.jsx`
 
 `.astro` files can end up looking very similar to `.jsx` files, but there are a few key differences. Here's a comparison between the two formats.
