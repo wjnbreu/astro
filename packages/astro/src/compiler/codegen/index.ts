@@ -480,7 +480,6 @@ async function compileHtml(enterNode: TemplateNode, state: CodegenState, compile
                 }
               }
             }
-            console.log(raw);
             // TODO Do we need to compile this now, or should we compile the entire module at the end?
             let code = compileExpressionSafe(raw).trim().replace(/\;$/, '');
             if (!FALSY_EXPRESSIONS.has(code)) {
