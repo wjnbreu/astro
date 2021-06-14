@@ -467,19 +467,30 @@ async function compileHtml(enterNode: TemplateNode, state: CodegenState, compile
             const children: string[] = await Promise.all((node.children ?? []).map((child) => compileHtml(child, state, compileOptions)));
             let raw = '';
             let nextChildIndex = 0;
-            const shouldUseFragment = children.length > 1 && (node.codeChunks[0].match(/\=\>/g) || node.codeChunks[0].match(/\bfunction\b/g)) && !(node.codeChunks[0].match(/\?/g) && node.codeChunks[1].match(/\:/g));
+            let innerParen = -1;
+
             for (const chunk of node.codeChunks) {
+              // Remove code comments and whitespace
+              const cleanChunk = chunk.slice(0).replace(/\/\*[\s\S]*?\*\/|\/\/.*/g,'').trim();
+              // If ending with an openParen, wrap with Fragment
+              const endsWithOpenParen = cleanChunk[cleanChunk.length - 1] === '(';
+              // If starting with an closeParen, possibly close the Fragment
+              const startsWithCloseParen = cleanChunk[0] === ')';
+              if (startsWithCloseParen && innerParen > -1) {
+                raw += ')'
+                innerParen--;
+              }
+
               raw += chunk;
+              if (endsWithOpenParen) {
+                raw += 'h(Fragment, null,\n'
+                innerParen++;
+              }
               if (nextChildIndex < children.length) {
-                if (shouldUseFragment && nextChildIndex === 0) {
-                  raw += 'h(Fragment, null, '
-                }
-                raw += children[nextChildIndex++] + (shouldUseFragment ? ',' : '');
-                if (shouldUseFragment && nextChildIndex === children.length) {
-                  raw += ')'
-                }
+                raw += children[nextChildIndex++] + (innerParen > -1 ? ',' : '');
               }
             }
+
             // TODO Do we need to compile this now, or should we compile the entire module at the end?
             let code = compileExpressionSafe(raw).trim().replace(/\;$/, '');
             if (!FALSY_EXPRESSIONS.has(code)) {

@@ -30,6 +30,15 @@ const items = [0, 1, 2];
           <div id={`c${item}`} />
         )
       })}
+      {items.length === 1 ? (
+        <div id={`ternary-a`} />
+        <div id={`ternary-b`} />
+        <div id={`ternary-c`} />
+      ) : (
+        <div id={`ternary-x`} />
+        <div id={`ternary-y`} />
+        <div id={`ternary-z`} />
+      )}
     </main>
   </body>
 </html>
