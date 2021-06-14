@@ -134,7 +134,36 @@ export let name;
 | Special Characters           | `&nbsp;`                                 | `{'\xa0'}` or `{String.fromCharCode(160)}`         |
 | Attributes                   | `dash-case`                              | `camelCase`                                        |
 
-### TODO: Styling
+### URL resolution
+
+It’s important to note that Astro **won’t** transform your URLs for you. For example, say you have the following structure:
+
+```
+├── public/
+│   └── thumbnail.png
+└── src/
+    └── pages/
+        ├── index.astro
+        └── thumbnail.png
+```
+
+Since `src/pages/index.astro` will build to `/index.html`, that will load at the root URL, or `/`. How should this resolve?
+
+```html
+<img src="./thumbnail.png" />
+```
+
+That is ambiguous, and may not resolve to the correct file. Instead, you should choose one of two options:
+
+```html
+<!-- Option 1: asset in public/ -->
+<img src="/thumbnail.png" />
+
+<!-- Option 2: asset in src/pages/ -->
+<img src="/_astro/src/pages/thumbnail.png" />
+```
+
+In short, your `public/` folder will map to `/`, and almost everything else will have `/_astro/` prepended. Try running `astro build` on your site to see what the final URLs for assets will be, and try to use those whenever possible so it’s unambiguous.
 
 ### TODO: Composition (Slots)
 
