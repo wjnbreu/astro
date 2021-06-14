@@ -467,12 +467,20 @@ async function compileHtml(enterNode: TemplateNode, state: CodegenState, compile
             const children: string[] = await Promise.all((node.children ?? []).map((child) => compileHtml(child, state, compileOptions)));
             let raw = '';
             let nextChildIndex = 0;
+            const hasMultipleChildren = children.length > 0;
             for (const chunk of node.codeChunks) {
               raw += chunk;
               if (nextChildIndex < children.length) {
-                raw += children[nextChildIndex++];
+                if (hasMultipleChildren && nextChildIndex === 0) {
+                  raw += 'h(Fragment, null, '
+                }
+                raw += children[nextChildIndex++] + (hasMultipleChildren ? ',' : '');
+                if (hasMultipleChildren && nextChildIndex === children.length) {
+                  raw += ')'
+                }
               }
             }
+            console.log(raw);
             // TODO Do we need to compile this now, or should we compile the entire module at the end?
             let code = compileExpressionSafe(raw).trim().replace(/\;$/, '');
             if (!FALSY_EXPRESSIONS.has(code)) {
