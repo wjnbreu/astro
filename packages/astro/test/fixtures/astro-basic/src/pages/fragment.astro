@@ -1,0 +1,28 @@
+---
+import TopLevel from '../components/TopLevel.astro';
+
+const items = [0, 1, 2];
+---
+
+<html>
+  <head>
+    <!-- Head Stuff -->
+  </head>
+  <body>
+    <main>
+      <TopLevel />
+      {items.map(item => (
+        <div id={`a${item}`} />
+        <div id={`b${item}`} />
+        <div id={`c${item}`} />
+      ))}
+      {items.map(item => {
+        return (
+          <div id={`x${item}`} />
+          <div id={`y${item}`} />
+          <div id={`z${item}`} />
+        )
+      })}
+    </main>
+  </body>
+</html>

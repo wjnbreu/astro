@@ -47,4 +47,11 @@ Basics('Selector with an empty body', async ({ runtime }) => {
   assert.equal($('.author').length, 1, 'author class added');
 });
 
+Basics('Automatically supports Fragments in expressions', async ({ runtime }) => {
+  const result = await runtime.load('/fragment');
+  const html = result.contents;
+  const $ = doc(html);
+  assert.equal($('main').children().length, 21);
+});
+
 Basics.run();
